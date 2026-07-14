@@ -48,7 +48,7 @@ export default function Sidebar({
                 ${isActive ? "bg-blue-100 text-gray-800" : "hover:bg-gray-800 text-gray-300"}`
               }
             >
-              <span className="w-5 h-5">{item.icon}</span>
+              <span className="w-5">{item.icon}</span>
               <span className="text-sm">{item.name}</span>
             </Link>
           )
