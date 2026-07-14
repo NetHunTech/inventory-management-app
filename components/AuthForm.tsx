@@ -46,19 +46,6 @@ export default function AuthForm({
           { mode === "signin" ? "Sign In" : "Sign Up"}
         </h1>
 
-        <input
-          className="border p-3 w-full rounded"
-          placeholder="Email"
-          onChange={e => setEmail(e.target.value)}
-        />
-
-        <input
-          className="border p-3 w-full rounded"
-          placeholder="Password"
-          type="password"
-          onChange={e => setPassword(e.target.value)}
-        />
-
         <p>
           {mode === "signin" ? (
             <>
@@ -84,6 +71,19 @@ export default function AuthForm({
             </>
           )}
         </p>
+
+        <input
+          className="border p-3 w-full rounded"
+          placeholder="Email"
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        <input
+          className="border p-3 w-full rounded"
+          placeholder="Password"
+          type="password"
+          onChange={e => setPassword(e.target.value)}
+        />
 
         <button
           className="bg-blue-600 text-white w-full py-3 rounded cursor-pointer hover:bg-blue-800">
