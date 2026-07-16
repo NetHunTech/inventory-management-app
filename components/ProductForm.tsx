@@ -56,9 +56,13 @@ export default function ProductForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
+    <form 
+      onSubmit={handleSubmit} 
+      className="flex flex-col space-y-4 max-w-xl"
+    >
 
       <input
+        className="bg-gray-200 py-3 pl-3 text-sm rounded-md focus:outline-sky-500"
         placeholder="SKU"
         value={form.sku}
         onChange={(e) =>
@@ -67,6 +71,7 @@ export default function ProductForm() {
       />
 
       <input
+        className="bg-gray-200 py-3 pl-3 text-sm rounded-md focus:outline-sky-500"
         placeholder="Product name"
         value={form.name}
         onChange={(e) =>
@@ -75,6 +80,7 @@ export default function ProductForm() {
       />
 
       <textarea
+        className="bg-gray-200 py-3 pl-3 text-sm rounded-md focus:outline-sky-500 resize-none"
         placeholder="Description"
         value={form.description}
         onChange={(e) =>
@@ -83,6 +89,7 @@ export default function ProductForm() {
       />
 
       <input
+        className="bg-gray-200 py-3 pl-3 text-sm rounded-md focus:outline-sky-500"
         placeholder="Unit"
         value={form.unit}
         onChange={(e) =>
@@ -91,6 +98,7 @@ export default function ProductForm() {
       />
 
       <input
+        className="bg-gray-200 py-3 pl-3 text-sm rounded-md focus:outline-sky-500"
         type="number"
         placeholder="Minimum stock"
         value={form.min_stock}
@@ -102,7 +110,10 @@ export default function ProductForm() {
         }
       />
 
-      <button disabled={loading}>
+      <button 
+        className="w-full cursor-pointer text-center bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+        disabled={loading}
+      >
         {loading ? "Saving..." : "Save Product"}
       </button>
 

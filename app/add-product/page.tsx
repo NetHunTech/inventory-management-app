@@ -1,13 +1,21 @@
 import ProductForm from "@/components/ProductForm";
+import Sidebar from "@/components/SideBar";
 
 export default function AddProductPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">
-        Add Product
-      </h1>
+    <div className="min-h-screen bg-gray-50">
+      {<Sidebar currenPath="/add-product"/>}
+      <main className="ml-64 p-8">
+        <div className="mb-8">
 
-      <ProductForm />
+          <h1 className="text-2xl font-semibold text-gray-900 mb-4">
+            Add Product
+          </h1>
+
+          <ProductForm />
+        </div>
+      </main>
+
     </div>
   );
 }
