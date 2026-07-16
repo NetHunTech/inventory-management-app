@@ -14,7 +14,7 @@ export default function Sidebar({
   const navigation = [
     {name: "Dashboard", href: "/dashboard", icon: <MdOutlineInventory />},
     {name: "Inventory", href: "/inventory", icon: <PiPackage />},
-    {name: "Plus", href: "/add-product", icon: <TiPlus />},
+    {name: "Add product", href: "/add-product", icon: <TiPlus />},
     {name: "Settings", href: "/settings", icon: <IoMdSettings />},
   ]
 
