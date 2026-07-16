@@ -31,7 +31,14 @@ export default function AuthForm({
         email, password
       });
 
-      setMessage(error ? error.message : "Logged in!")
+      if (error) {
+        setMessage(error.message)
+      } else {
+        setMessage("Logged in!")
+
+        router.push("/dashboard")
+        router.refresh()
+      }
     }
   }
 
