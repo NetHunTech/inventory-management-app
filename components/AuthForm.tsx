@@ -49,7 +49,7 @@ export default function AuthForm({
         <p>
           {mode === "signin" ? (
             <>
-              If you already have an account:{" "}
+              If you don't have an account:{" "}
               <button
                 type="button"
                 className="text-blue-600 underline cursor-pointer"
