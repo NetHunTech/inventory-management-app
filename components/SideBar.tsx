@@ -39,8 +39,8 @@ export default function Sidebar({
   async function logout(){
 
     await supabase.auth.signOut()
-    router.push("/")
-
+    router.replace("/")
+    router.refresh()
   }
 
   const navigation = [
