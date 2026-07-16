@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
 
   if (!user && isProtectedRoute) {
     return NextResponse.redirect(
-      new URL("/signin", request.url)
+      new URL("/sign-in", request.url)
     );
   }
 
