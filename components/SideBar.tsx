@@ -52,6 +52,8 @@ export default function Sidebar({
 
   return (
     <div className="fixed left-0 top-0 bg-gray-900 text-white w-64 min-h-screen p-6 z-10">
+
+      {/* App logo & title */}
       <div className="mb-8">
         <div className="flex items-center space-x-2 mb-4">
           <Image
@@ -65,6 +67,7 @@ export default function Sidebar({
         </div>
       </div>
 
+      {/* Inventory bar */}
       <nav className="space-y-1">
         <div className="text-sm font-semibold text-gray-400 uppercase">
           Inventory
@@ -87,6 +90,7 @@ export default function Sidebar({
         })}
       </nav>
 
+      {/* Profile */}
       <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-700">
         <div 
           onClick={() => setOpenProfile(!openProfile)}
@@ -108,6 +112,7 @@ export default function Sidebar({
           </div>
         </div>
 
+        {/* Profile choices */}
         {openProfile && (
             <div className="absolute bottom-20 left-6 w-52 bg-gray-800 rounded-xl shadow-lg p-3">
               <div className="flex items-center px-3 rounded-lg hover:bg-gray-700">
@@ -123,7 +128,7 @@ export default function Sidebar({
               
               <button
                 onClick={logout}
-                className="flex items-center gap-3 w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-gray-700 text-red-400"
+                className="flex items-center gap-3 cursor-pointer w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-gray-700 text-red-400"
               >
                 <PiSignOutLight />
                 Sign out
