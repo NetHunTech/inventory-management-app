@@ -5,10 +5,29 @@ import Sidebar from "@/components/SideBar";
 export default async function Inventory() {
   const supabase = await createClient()
 
-  const { data: products, error } = await supabase
-    .from("products")
-    .select("id, sku, name, unit, min_stock")
-    .order("name")
+  const { data, error } = await supabase
+    .from("inventory")
+    .select(`
+      quantity,
+      products (
+        id,
+        sku,
+        name,
+        unit,
+        min_stock
+      )
+    `)
+    .order("product_id")
+
+  const products =
+    data?.map((item) => ({
+      id: item.products.id,
+      sku: item.products.sku,
+      name: item.products.name,
+      unit: item.products.unit,
+      min_stock: item.products.min_stock,
+      quantity: item.quantity,
+    })) ?? []
 
   if (error) {
     return (
@@ -29,7 +48,7 @@ export default async function Inventory() {
                 Inventory
               </h1>
 
-              <ProductTable products={products ?? []}/>
+              <ProductTable products={products}/>
             </div>
           </div>
         </div>

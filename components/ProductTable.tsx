@@ -8,6 +8,7 @@ type Product = {
   name: string
   unit: string
   min_stock: number
+  quantity: number
 }
 
 type Props = {
@@ -40,20 +41,55 @@ export default function ProductTable({ products }: Props) {
             <tr>
               <th className="p-3 text-left">SKU</th>
               <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left">Unit</th>
-              <th className="p-3 text-left">Minimum Stock</th>
+              <th className="p-3 text-left">Stock</th>
+              <th className="p-3 text-left">Minimum</th>
+              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {filteredProducts.map((product) => (
-              <tr key={product.id} className="border-t">
-                <td className="p-3">{product.sku}</td>
-                <td className="p-3">{product.name}</td>
-                <td className="p-3">{product.unit}</td>
-                <td className="p-3">{product.min_stock}</td>
-              </tr>
-            ))}
+            {filteredProducts.map((product) => {
+              const status = product.quantity === 0
+                ? "Out of Stock"
+                : product.quantity <= product.min_stock
+                ? "Low Stock"
+                : "In Stock";
+
+              return(
+                <tr key={product.id} className="border-t">
+                  <td className="p-3">{product.sku}</td>
+                  <td className="p-3">{product.name}</td>
+                  <td className="p-3">{product.quantity}</td>
+                  <td className="p-3">{product.min_stock}</td>
+                  <td className="p-3">
+                    {status === "In Stock" && (
+                      <span className="rounded bg-green-100 px-2 py-1 text-green-700">
+                        In Stock
+                      </span>
+                    )}
+                    {status === "Low Stock" && (
+                      <span className="rounded bg-yellow-100 px-2 py-1 text-yellow-700">
+                        Low Stock
+                      </span>
+                    )}
+                    {status === "Out of Stock" && (
+                      <span className="rounded bg-red-100 px-2 py-1 text-red-700">
+                        Out of Stock
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-3">
+                    <button className="mr-2 rounded bg-green-600 px-2 py-1 text-white">
+                      +
+                    </button>
+                    <button className="rounded bg-red-600 px-2 py-1 text-white">
+                      -
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
 
             {filteredProducts.length === 0 && (
               <tr>
