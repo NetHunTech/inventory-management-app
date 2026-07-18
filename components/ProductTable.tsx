@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import IncreaseStockModal from "./IncreaseStockModal";
 
 type Product = {
   id: string
@@ -17,6 +18,7 @@ type Props = {
 
 export default function ProductTable({ products }: Props) {
   const [search, setSearch] = useState("")
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const filteredProducts = useMemo(() => {
     return products.filter(product =>
@@ -80,7 +82,10 @@ export default function ProductTable({ products }: Props) {
                     )}
                   </td>
                   <td className="p-3">
-                    <button className="mr-2 rounded bg-green-600 px-2 py-1 text-white">
+                    <button 
+                      onClick={() => setSelectedProduct(product)}
+                      className="mr-2 rounded bg-green-600 px-2 py-1 text-white"
+                    >
                       +
                     </button>
                     <button className="rounded bg-red-600 px-2 py-1 text-white">
@@ -104,6 +109,12 @@ export default function ProductTable({ products }: Props) {
           </tbody>
 
         </table>
+
+        <IncreaseStockModal
+          open={selectedProduct !== null}
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
       </div>
     </div>
   )
