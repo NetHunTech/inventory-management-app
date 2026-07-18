@@ -1,5 +1,9 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation"
+import { useState } from "react";
+
 type Product = {
   id: string;
   sku: string;
@@ -19,6 +23,42 @@ export default function IncreaseStockModal({
   onClose,
 }: Props) {
 
+  const supabase = createClient()
+  const router = useRouter()
+
+  const [quantity, setQuantity] = useState<number>(1)
+  const [note, setNote] = useState<string>()
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const handleSave = async () => {
+    if (!product) return;
+
+    setLoading(true);
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const { error } = await supabase
+      .from("stock_movements")
+      .insert({
+        product_id: product.id,
+        warehouse_id: "IDE_A_WAREHOUSE_ID",
+        movement_type: "IN",
+        quantity,
+        note,
+        created_by: user?.id,
+      });
+
+    setLoading(false);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    onClose();
+    router.refresh();
+  }
+
   if (!open) return null
 
   return (
@@ -30,7 +70,7 @@ export default function IncreaseStockModal({
         </h2>
 
         <p className="mb-4 text-gray-600">
-          {product?.name}
+          {product?.name} ({product?.sku})
         </p>
         
         <div className="space-y-4">
@@ -39,6 +79,9 @@ export default function IncreaseStockModal({
             <input
               type="number"
               className="mt-1 w-full rounded border p-2"
+              onChange={e => setQuantity(Number(e.target.value))}
+              min={1}
+              value={quantity}
             />
           </div>
 
@@ -46,6 +89,8 @@ export default function IncreaseStockModal({
             <label>Note</label>
             <textarea
               className="mt-1 w-full rounded border p-2 resize-none"
+              onChange={e => setNote(e.target.value)}
+              value={note}
             />
           </div>
         </div>
@@ -59,9 +104,11 @@ export default function IncreaseStockModal({
           </button>
 
           <button
+            onClick={handleSave}
+            disabled={loading}
             className="rounded bg-green-600 px-4 py-2 text-white"
           >
-            Save
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
