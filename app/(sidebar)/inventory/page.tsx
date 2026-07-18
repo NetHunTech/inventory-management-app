@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import ProductTable from "@/components/ProductTable";
+import ProductTable from "@/components/inventory/ProductTable";
 import Sidebar from "@/components/SideBar";
 
 export default async function Inventory() {
