@@ -1,25 +1,27 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
-import { useState } from "react";
+import { useEffect, useState } from "react"
 
 type Product = {
-  id: string;
-  sku: string;
-  name: string;
-  quantity: number;
+  id: string
+  sku: string
+  name: string
+  quantity: number
 };
 
 type Props = {
   open: boolean
   product: Product | null
+  type: "increase" | "decrease"
   onClose: () => void
 }
 
-export default function IncreaseStockModal({
+export default function StockMovementModal({
   open,
   product,
+  type,
   onClose,
 }: Props) {
 
@@ -30,14 +32,22 @@ export default function IncreaseStockModal({
   const [note, setNote] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (!open) return
+
+    setQuantity(type === "increase" ? 1 : 0);
+    setNote("");
+  }, [open, type])
+
   if (!open || !product) return null
 
   const handleSave = async () => {
     setLoading(true)
 
-    const { error } = await supabase.rpc("add_stock", {
+    const { error } = await supabase.rpc("change_stock", {
       p_product_id: product.id,
       p_quantity: quantity,
+      p_type: type,
       p_note: note,
     })
 
@@ -48,7 +58,7 @@ export default function IncreaseStockModal({
       return
     }
 
-    setQuantity(1)
+    setQuantity(type === "increase" ? 1 : 0)
     setNote("")
 
     onClose()
@@ -60,11 +70,13 @@ export default function IncreaseStockModal({
       <div className="w-full max-w-md rounded-lg bg-white p-6">
 
         <h2 className="mb-4 text-xl font-bold">
-          Increase Stock
+          {type === "increase"
+            ? "Increase Stock"
+            : "Remove Stock"}
         </h2>
 
         <p className="mb-4 text-gray-600">
-          {product?.name} ({product?.sku})
+          {product.name} ({product.sku})
         </p>
         
         <div className="space-y-4">
@@ -73,8 +85,25 @@ export default function IncreaseStockModal({
             <input
               type="number"
               className="mt-1 w-full rounded border p-2"
-              onChange={e => setQuantity(Number(e.target.value))}
-              min={1}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+
+                if (type === "increase") {
+                  setQuantity(Math.max(1, value));
+                } else {
+                  setQuantity(value > 0 ? 0 : value);
+                }
+              }}
+              min={
+                type === "increase"
+                  ? 1
+                  : -product.quantity
+              }
+              max={
+                type === "increase"
+                  ? undefined
+                  : 0
+              }
               value={quantity}
             />
           </div>
@@ -99,7 +128,7 @@ export default function IncreaseStockModal({
 
           <button
             onClick={handleSave}
-            disabled={loading}
+            disabled={loading || quantity === 0}
             className="rounded cursor-pointer bg-green-600 px-4 py-2 text-white hover:bg-green-800"
           >
             {loading ? "Saving..." : "Save"}

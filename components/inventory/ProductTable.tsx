@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import IncreaseStockModal from "./IncreaseStockModal";
+import StockMovementModal from "./StockMovementModal";
 
 type Product = {
   id: string
@@ -16,9 +16,14 @@ type Props = {
   products: Product[]
 }
 
+type StockAction = {
+  product: Product
+  type: "increase" | "decrease"
+}
+
 export default function ProductTable({ products }: Props) {
   const [search, setSearch] = useState("")
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState<StockAction | null>(null)
 
   const filteredProducts = useMemo(() => {
     return products.filter(product =>
@@ -83,12 +88,23 @@ export default function ProductTable({ products }: Props) {
                   </td>
                   <td className="p-3">
                     <button 
-                      onClick={() => setSelectedProduct(product)}
+                      onClick={() => setSelectedProduct({
+                          product,
+                          type: "increase"
+                        })
+                      }
                       className="mr-2 rounded bg-green-600 px-2 py-1 text-white"
                     >
                       +
                     </button>
-                    <button className="rounded bg-red-600 px-2 py-1 text-white">
+                    <button 
+                      onClick={() => setSelectedProduct({
+                          product,
+                          type: "decrease"
+                        })
+                      }
+                      className="rounded bg-red-600 px-2 py-1 text-white"
+                    >
                       -
                     </button>
                   </td>
@@ -110,9 +126,10 @@ export default function ProductTable({ products }: Props) {
 
         </table>
 
-        <IncreaseStockModal
+        <StockMovementModal
           open={selectedProduct !== null}
-          product={selectedProduct}
+          product={selectedProduct?.product ?? null}
+          type={selectedProduct?.type ?? "increase"}
           onClose={() => setSelectedProduct(null)}
         />
       </div>
