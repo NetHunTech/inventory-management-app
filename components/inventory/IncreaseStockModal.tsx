@@ -27,39 +27,33 @@ export default function IncreaseStockModal({
   const router = useRouter()
 
   const [quantity, setQuantity] = useState<number>(1)
-  const [note, setNote] = useState<string>()
+  const [note, setNote] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
 
+  if (!open || !product) return null
+
   const handleSave = async () => {
-    if (!product) return;
+    setLoading(true)
 
-    setLoading(true);
+    const { error } = await supabase.rpc("add_stock", {
+      p_product_id: product.id,
+      p_quantity: quantity,
+      p_note: note,
+    })
 
-    const { data: { user } } = await supabase.auth.getUser();
-
-    const { error } = await supabase
-      .from("stock_movements")
-      .insert({
-        product_id: product.id,
-        warehouse_id: "IDE_A_WAREHOUSE_ID",
-        movement_type: "IN",
-        quantity,
-        note,
-        created_by: user?.id,
-      });
-
-    setLoading(false);
+    setLoading(false)
 
     if (error) {
-      alert(error.message);
-      return;
+      alert(error.message)
+      return
     }
 
-    onClose();
-    router.refresh();
-  }
+    setQuantity(1)
+    setNote("")
 
-  if (!open) return null
+    onClose()
+    router.refresh()
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40">
@@ -98,7 +92,7 @@ export default function IncreaseStockModal({
         <div className="mt-6 flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="rounded bg-gray-300 px-4 py-2"
+            className="rounded cursor-pointer bg-gray-300 px-4 py-2 hover:bg-gray-400"
           >
             Cancel
           </button>
@@ -106,7 +100,7 @@ export default function IncreaseStockModal({
           <button
             onClick={handleSave}
             disabled={loading}
-            className="rounded bg-green-600 px-4 py-2 text-white"
+            className="rounded cursor-pointer bg-green-600 px-4 py-2 text-white hover:bg-green-800"
           >
             {loading ? "Saving..." : "Save"}
           </button>
