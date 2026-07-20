@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import StockMovementModal from "./StockMovementModal";
+import StockHistoryModal from "./StockHistoryModal";
 
 type Product = {
   id: string
@@ -24,6 +25,7 @@ type StockAction = {
 export default function ProductTable({ products }: Props) {
   const [search, setSearch] = useState("")
   const [selectedProduct, setSelectedProduct] = useState<StockAction | null>(null)
+  const [historyProduct, setHistoryProduct] = useState<Product | null>(null)
 
   const filteredProducts = useMemo(() => {
     return products.filter(product =>
@@ -93,7 +95,7 @@ export default function ProductTable({ products }: Props) {
                           type: "increase"
                         })
                       }
-                      className="mr-2 rounded bg-green-600 px-2 py-1 text-white"
+                      className="mr-2 rounded cursor-pointer bg-green-600 w-8 h-8 text-white text-center hover:bg-green-800"
                     >
                       +
                     </button>
@@ -103,9 +105,15 @@ export default function ProductTable({ products }: Props) {
                           type: "decrease"
                         })
                       }
-                      className="rounded bg-red-600 px-2 py-1 text-white"
+                      className="mr-2 rounded cursor-pointer bg-red-600 w-8 h-8 text-white text-center hover:bg-red-800"
                     >
                       -
+                    </button>
+                    <button
+                      onClick={() => setHistoryProduct(product)}
+                      className="mr-2 rounded cursor-pointer bg-gray-300 w-8 h-8 text-white text-center hover:bg-gray-500"
+                    >
+                      📜
                     </button>
                   </td>
                 </tr>
@@ -131,6 +139,12 @@ export default function ProductTable({ products }: Props) {
           product={selectedProduct?.product ?? null}
           type={selectedProduct?.type ?? "increase"}
           onClose={() => setSelectedProduct(null)}
+        />
+
+        <StockHistoryModal
+          open={historyProduct !== null}
+          product={historyProduct}
+          onClose={() => setHistoryProduct(null)}
         />
       </div>
     </div>
